@@ -1,0 +1,53 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+plugins {
+    id 'org.springframework.boot' version "${springVersion}"
+    id 'com.vaadin' version "${vaadinVersion}"
+    id 'java'
+}
+
+group = 'dev.axaratox'
+version = '0.1.0'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    //spring + vaadin
+    implementation platform(SpringBootPlugin.BOM_COORDINATES)
+    implementation platform("com.vaadin:vaadin-bom:${vaadinVersion}")
+    implementation "com.vaadin:vaadin-spring-boot-starter"
+    implementation "org.springframework.boot:spring-boot-starter-cache"
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+
+    //lombok
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    //tinkoff
+    implementation "ru.tinkoff.piapi:java-sdk-core:${tinkoffSdkVersion}"
+
+    //utils
+    implementation "org.apache.commons:commons-lang3:${commonsLangVersion}"
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+vaadin {
+    productionMode = true
+}
